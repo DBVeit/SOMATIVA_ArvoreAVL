@@ -3,42 +3,26 @@ public class Main {
         ArvoreBinaria arvoreBinaria = new ArvoreBinaria();
         System.out.println("\n-> Inserindo elementos...");
 
-        arvoreBinaria.inserir(65);
-        arvoreBinaria.inserir(95);
-        //arvoreBinaria.inserir(125);
-        //arvoreBinaria.inserir(35);
-        //arvoreBinaria.inserir(5);
-        arvoreBinaria.inserir(80);
-
-        /*arvoreBinaria.inserir(30);//A
-        arvoreBinaria.inserir(25);//B
-        arvoreBinaria.inserir(35);//C
-        arvoreBinaria.inserir(20);//D
-        arvoreBinaria.inserir(28);//E
-        arvoreBinaria.inserir(40);//F
-        arvoreBinaria.inserir(26);//G
-        arvoreBinaria.inserir(38);//H
-        arvoreBinaria.inserir(45);//I
-        arvoreBinaria.percorrePreOrdem();
+        arvoreBinaria.inserir(100);//a
+        arvoreBinaria.inserir(56);//b
+        arvoreBinaria.inserir(32);//c
+        arvoreBinaria.inserir(80);//d
+        arvoreBinaria.inserir(127);//e
+        arvoreBinaria.inserir(115);//f
+        arvoreBinaria.removerElementoN(32);//g
+        arvoreBinaria.inserir(85);//h
+        arvoreBinaria.inserir(130);//i
+        arvoreBinaria.inserir(82);//j
+        arvoreBinaria.inserir(90);//k
+        arvoreBinaria.inserir(120);//l
+        arvoreBinaria.removerElementoN(80);//m
+        arvoreBinaria.inserir(95);//n
+        arvoreBinaria.removerElementoN(127);//o
+        arvoreBinaria.inserir(40);//p
+        arvoreBinaria.inserir(68);//q
+        arvoreBinaria.removerElementoN(56);//56
+        arvoreBinaria.removerElementoN(40);//40
+        arvoreBinaria.removerElementoN(82);//t
         arvoreBinaria.percorreInOrdem();
-        arvoreBinaria.percorrePosOrdem();
-
-        System.out.println("\n-> Removendo elemento N...");
-        arvoreBinaria.removerElementoN(30);
-        arvoreBinaria.percorrePreOrdem();
-        arvoreBinaria.percorreInOrdem();
-        arvoreBinaria.percorrePosOrdem();
-
-        System.out.println("\n-> Removendo maior elemento...");
-        arvoreBinaria.removerMaiorElemento();
-        arvoreBinaria.percorrePreOrdem();
-        arvoreBinaria.percorreInOrdem();
-        arvoreBinaria.percorrePosOrdem();
-
-        System.out.println("\n-> Removendo menor elemento...");
-        arvoreBinaria.removerMenorElemento();*/
-        arvoreBinaria.percorrePreOrdem();
-        arvoreBinaria.percorreInOrdem();
-        arvoreBinaria.percorrePosOrdem();
     }
 }

@@ -1,14 +1,16 @@
 public class ArvoreBinaria {
 
-    private Node raiz;
+    private Node raiz = null;
 
-
-    /*----------AVL----------*/
     private int calcAltura(Node node){
         if (node == null){
             return -1;
         }
-        return node.altura;
+        int esquerda = calcAltura(node.esquerda);
+        int direita = calcAltura(node.direita);
+        if (esquerda > direita)
+            return 1 + esquerda;
+        return 1 + direita;
     }
     /*Obtem a altura do nó - Se o nó for nulo a altura é -1*/
 
@@ -18,90 +20,91 @@ public class ArvoreBinaria {
         }
         return calcAltura(node.esquerda) - calcAltura(node.direita);
     }
-    /*Calcula o fator de balanciamento do nó - Se o nó for nulo fb é -1*/
+    /*Calcula o fator de balanciamento do nó - Se o nó for nulo fb é 0*/
 
     private void atualizaAltura(Node node){
         node.altura = 1 + Math.max(calcAltura(node.esquerda), calcAltura(node.direita));
     }
+    /*Recebe um nó e atualiza a altura, somando o máximo entre as alturas das subárvores*/
 
-    private Node rotacaoADireita(Node y){
-        Node x = y.esquerda;
-        Node T2 = x.direita;
+    private Node rotacaoADireita(Node raiz){
+        Node novaRaiz = raiz.esquerda; //novaRaiz é o filho à esquerda de raiz
+        Node temp1 = novaRaiz.direita; //temp1 é a subárvore à direita de novaRaiz que se tornará a nova subárvore à esquerda de raiz
 
-        x.direita = y;
-        y.esquerda = T2;
+        //Realiza rotação à direita
+        novaRaiz.direita = raiz;
+        raiz.esquerda = temp1;
 
-        atualizaAltura(y);
-        atualizaAltura(x);
+        //Atualiza altura após rotação
+        atualizaAltura(raiz);
+        atualizaAltura(novaRaiz);
 
-        return x;
+        return novaRaiz; //Retorna o novo nó raiz
     }
 
-    private Node rotacaoAEsquerda(Node x){
-        Node y = x.direita;
-        Node T2 = y.esquerda;
+    private Node rotacaoAEsquerda(Node raiz){
+        Node novaRaiz = raiz.direita; //novaRaiz é o filho à direita de raiz
+        Node temp1 = novaRaiz.esquerda; // temp1 é a subárvore à esquerda de novaRaiz que se tornará a nova subárvore à direita de raiz
 
-        y.esquerda = x;
-        x.direita = T2;
+        //Realiza rotação à esquerda
+        novaRaiz.esquerda = raiz;
+        raiz.direita = temp1;
 
-        atualizaAltura(x);
-        atualizaAltura(y);
+        //Atualiza altura após rotação
+        atualizaAltura(raiz);
+        atualizaAltura(novaRaiz);
 
-        return y;
+        return novaRaiz; //Retorna o novo nó raiz
     }
-    /*----------AVL----------*/
-
-
-    /*public ArvoreBinaria(){
-        raiz = null;
-    }*/
 
     public void inserir(int info) {
         raiz = inserirElemento(raiz, info);
     }
+    /*Chama e executa o método inserirElemento*/
 
     private Node inserirElemento(Node node, int info){
         if (node == null){
-            return new Node(info);//Se o nó raiz é nulo -> cria-se um nó com um valor info que será a raiz
+            return new Node(info); //Se o nó raiz é nulo -> cria-se um nó com um valor info que será a raiz
         }
         if (info < node.info){
-            node.esquerda = inserirElemento(node.esquerda, info);//Se o valor info a inserir é menor que o info raiz -> insere à esquerda da raiz atual
-        } else if (info > node.info) {
-            node.direita = inserirElemento(node.direita, info);//Se o valor info a inserir é maior que o info raiz -> insere à direita da raiz atual
+            node.esquerda = inserirElemento(node.esquerda, info); //Se o valor info a inserir é menor que o info raiz -> insere à esquerda da raiz atual
+        } else if (info >= node.info) {
+            node.direita = inserirElemento(node.direita, info); //Se o valor info a inserir é maior que o info raiz -> insere à direita da raiz atual
         }else{
-            return node;
+            return node; //Se valor info já existe não fará nada
         }
 
+        atualizaAltura(node); //Atualiza altura do nó
 
-        /*----------AVL----------*/
-        atualizaAltura(node);
+        int fatorBalanceamento = calcFatorBalanceamento(node); //Calcula fb e atribui a uma variável
 
-        int fatorBalanceamento = calcFatorBalanceamento(node);
-
-        //Rotação a direita simples
+        //Rotação simples a direita
         if (fatorBalanceamento > 1 && info < node.esquerda.info){
+            System.out.println("ROTAÇÃO SIMPLES À DIREITA");
             return rotacaoADireita(node);
         }
 
-        //Rotação a esquerda simples
+        //Rotação simples a esquerda
         if (fatorBalanceamento < -1 && info > node.direita.info){
+            System.out.println("ROTAÇÃO SIMPLES À ESQUERDA");
             return rotacaoAEsquerda(node);
         }
 
         //Dupla rotação - esquerda-direita
         if (fatorBalanceamento > 1 && info > node.esquerda.info){
+            System.out.println("DUPLA ROTAÇÃO-ESQUERDA-DIREITA");
             node.esquerda = rotacaoAEsquerda(node.esquerda);
             return rotacaoADireita(node);
         }
 
         //Dupla rotação - direita-esquerda
         if (fatorBalanceamento < -1 && info < node.direita.info){
+            System.out.println("DUPLA ROTAÇÃO-DIREITA-ESQUERDA");
             node.direita = rotacaoADireita(node.direita);
             return rotacaoAEsquerda(node);
         }
 
         return node;
-        /*----------AVL----------*/
     }
 
 
@@ -233,23 +236,32 @@ public class ArvoreBinaria {
 
         int fatorBalanceamento = calcFatorBalanceamento(node);
 
+        //Rotação simples a direita
         if (fatorBalanceamento > 1 && calcFatorBalanceamento(node.esquerda) >= 0){
+            System.out.println("ROTAÇÃO SIMPLES À DIREITA");
             return rotacaoADireita(node);
         }
 
+        //Rotação simples a esquerda
         if (fatorBalanceamento < -1 && calcFatorBalanceamento(node.direita) <= 0){
+            System.out.println("ROTAÇÃO SIMPLES À ESQUERDA");
             return rotacaoAEsquerda(node);
         }
 
+        //Dupla rotação - esquerda-direita
         if (fatorBalanceamento > 1 && calcFatorBalanceamento(node.esquerda) < 0){
+            System.out.println("DUPLA ROTAÇÃO-ESQUERDA-DIREITA");
             node.esquerda = rotacaoAEsquerda(node.esquerda);
             return rotacaoADireita(node);
         }
 
+        //Dupla rotação - direita-esquerda
         if (fatorBalanceamento < -1 && calcFatorBalanceamento(node.direita) > 0){
+            System.out.println("DUPLA ROTAÇÃO-DIREITA-ESQUERDA");
             node.direita = rotacaoADireita(node.direita);
             return rotacaoAEsquerda(node);
         }
+        /*Funcionamento semelhante a inserção com algumas diferenças*/
 
         return node;
     }
